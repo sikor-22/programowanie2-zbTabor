@@ -47,9 +47,9 @@ void medNormalize(CImg<int> &img){
 	img = img*(float(2048+3071)/(float)(max - min));
 }
 
-CImg<int> proguj(CImg<int>& tmp, int prog){
+CImg<int> threshold(CImg<int>& tmp, int prog){
     /*
-     treshold 3d image with "prog" threshold
+     threshold 3d image with "prog" threshold
      */
     CImg<int> img(tmp);
     for (int i = 0; i < img.width(); i++) {
@@ -65,9 +65,9 @@ CImg<int> proguj(CImg<int>& tmp, int prog){
     return img;
 }
 
-CImg<int> findComponents(CImg<int>& imgA, int prog) {
+CImg<int> findComponents(CImg<int>& imgA) {
     /*
-     find connected components of 3d image with "prog" threshold
+     find connected components of thresholded 3d image
      */
     int i, j;
 
@@ -76,7 +76,6 @@ CImg<int> findComponents(CImg<int>& imgA, int prog) {
     CImg<int> tmp(imgA);
     tmp.fill(0);
     int N = 0;
-    CImg<int> img = proguj(imgA, prog);
 
     for (int k = 0; k < img.depth(); k++) {
         for (int i = 0; i < img.width(); i++) {
@@ -112,17 +111,16 @@ CImg<int> findComponents(CImg<int>& imgA, int prog) {
 }
 
 
-CImg<int> findFromPoint(CImg<int>& imgA, int i, int j, int k, int prog){
+CImg<int> findFromPoint(CImg<int>& imgA, int i, int j, int k){
     /*
      find connected component starting from point given by i, j, k,
-     with threshold given by "prog"
+    of thresholded 3d image
      */
     queue <Pixel> kolejka;
 
     CImg<int> tmp(imgA);
     tmp.fill(0);
     int N = 1;
-    CImg<int> img = proguj(imgA, prog);
     tmp(i, j, k) = N;
     kolejka.push(Pixel(i, j, k));
     while (!kolejka.empty()) {
